@@ -30,9 +30,9 @@
 ########################################################################################
 #
 # This File
-#   Filename: BL1-UDP-Server.py
+#   Filename: BL2-UDP-Server.py
 #   Language: Python 3.9.1
-#   Run Command: python3 BL1-UDP-Server.py
+#   Run Command: python3 BL2-UDP-Server.py
 #   Purpose: UDP sender: Send the host name and system time as a message to a 
 #            destination host designated by its IP address and port number. Repeat the 
 #            transmission when enabled to do so.Read and display the returned messages, 
@@ -49,6 +49,7 @@ import time
 serverSocket = socket(AF_INET, SOCK_DGRAM)
 # Assign IP address and port number to socket 
 serverSocket.bind(('', 12001))
+print("Server is open and listening!")
 while True:
     # Receive the client packet along with the address it is coming from 
     message, address = serverSocket.recvfrom(2048)

@@ -46,10 +46,14 @@
 from socket import *
 import random
 import time
+
+timeout = 0
+
 # Create a UDP socket
 serverSocket = socket(AF_INET, SOCK_DGRAM)
 # Assign IP address and port number to socket 
 serverSocket.bind(('', 12002))
+print("Server is open and listening!")
 while True:
     # Receive the client packet along with the address it is coming from 
     message, address = serverSocket.recvfrom(1024)
@@ -57,14 +61,16 @@ while True:
     if message != "":
         ####### simulate random rtt delay
         delay = random.randint(10, 40)
-        ####### 20% of (40-10) = 6
-        if delay >= 34:
-            ms = 1
+        chance = random.randint(1, 3)
+        print(message, delay, chance)
+        if chance == 3:
+            time.sleep(1)
+            timeout += 1
+            print("timeout counter = " + str(timeout))
         else:
             ms = delay / 1000
-        time.sleep(ms)
+            time.sleep(ms)
+            print("ms = " + str(ms))
 
     # The server responds
     serverSocket.sendto(message, address)
-
-

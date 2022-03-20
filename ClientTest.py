@@ -30,9 +30,9 @@
 ########################################################################################
 #
 # This File
-#   Filename: BL1-UDP-Client.py
+#   Filename: ClientTest.py
 #   Language: Python 3.9.1
-#   Run Command: python3 BL1-UDP-Client.py
+#   Run Command: python3 ClientTest.py
 #   Purpose: UDP sender: Send the host name and system time as a message to a 
 #            destination host designated by its IP address and port number. Repeat the 
 #            transmission when enabled to do so.Read and display the returned messages, 
@@ -53,7 +53,7 @@ port = 12002
 serverAddress = (host, port)
 
 ######## ping variables
-number_of_pings = 40
+number_of_pings = 500 
 timeout = 1 # 1 second = max amount of time to make client wait, any longer and it times out
 sleep_time = 0
 
@@ -85,23 +85,24 @@ def summary():
     total_minutes = total_time / 60000
 
     ######## print out summary stats
-    print("\n\n")
-    print("Min RTT = " + str('%.2f'%min_ping) + " ms")
-    print("Max RTT = " + str('%.2f'%max_ping) + " ms")
-    print("Avg RTT = %0.3f ms" % (avg_ping / ping_count))
-    print("Packet Lost = %0.3f ms" % packet_loss)
-    print("\n\n")
-
-    print("ALTERNATE ANALYSIS: ")
-    print('--- %s udp ping statistics ---' % (host))
-    print('%d packets transmitted, %d received, %0.0f%% packet loss, time %0.0fms' % (ping_count, ping_received, (ping_count - ping_received) / ping_count * 100, total_time))
-    print('rtt min/avg/max/mdev = %0.3f/%0.3f/%0.3f/%0.3f ms' % (min_ping, avg_ping / ping_count, max_ping, max_ping - min_ping))
+    print("\n\n STATISTICS:")                                   # RTT = Round Trip Time
+    print("  Min RTT     = " + str('%.2f'%min_ping) + " ms")    # smallest recorded RTT
+    print("  Max RTT     = " + str('%.2f'%max_ping) + " ms")    # biggest recorded RTT
+    print("  Avg RTT     = %0.3f ms" % (avg_ping / ping_count)) # average recorded RTT
+    print("  Packet Lost = " + str(packet_loss) + "%")          # Packets sent - Packets received
+    print("  MDEV        = " + str(max_ping - min_ping))        # MDEV = RTT Deviation from Mean (mean = avg rtt)
     
-    print("\n\n")
-    print("Total Milli-Seconds: " + str(total_milliseconds))
-    print("Total Seconds:       " + str(total_seconds))
-    print("Total Minutes:       " + str(total_minutes))
-    print("\n\n")
+
+    print("\n\n ALTERNATE ANALYSIS: ")
+    print('  --- %s udp ping statistics ---' % (host))
+    print('  %d packets transmitted, %d received, %0.0f%% packet loss,total time %0.0fms' % (ping_count, ping_received, (ping_count - ping_received) / ping_count * 100, total_time))
+    print('  rtt min/avg/max/mdev = %0.3f/%0.3f/%0.3f/%0.3f ms' % (min_ping, avg_ping / ping_count, max_ping, max_ping - min_ping))
+    
+    print("\n\n TOTAL TIME:")
+    print("  Total Milli-Seconds: " + str(total_milliseconds))
+    print("  Total Seconds:       " + str(total_seconds))
+    print("  Total Minutes:       " + str(total_minutes))
+    print("--------------------------------------------------------------------------------------")
     sys.exit()
 
 ####### get time before the seq of pings starts
@@ -152,15 +153,18 @@ for seq in range(number_of_pings):
         ####### print out response
                  
         print("+-------------------------------------------------------------------------------------+")
-        print("| Ping " + str(seq) + ":" + " host " + sa + " replied: " + res + ", RTT = " + str('%.2f'%elapsed) + " ms")
+        print("| - Ping " + str(seq) + ":" + " host " + sa + " replied: " + res + ", RTT = " + str('%.2f'%elapsed) + " ms")
         # time.sleep(sleep_time) # can be adjusted to see the pings come in more slowly
         # from other file:
-        print("|         received %s bytes from %s udp_seq=%d time=%0.1f ms jitter=%0.2f ms" % (len(response), host, seq, elapsed, time_delay))
-        
+        print("|            received %s bytes from %s udp_seq=%d time=%0.1f ms jitter=%0.2f ms" % (len(response), host, seq, elapsed, time_delay))
+        print("|            ping_count: " + str(ping_count) + ", ping_received: " + str(ping_received) + ", packet_loss: " + str((ping_count - ping_received) / ping_count * 100) + "%") 
     ####### if socket timesout, no stats will be calculated and ping is not lossless 
     except socket.timeout as e:
         ####### time out message to inform client
-        print('udp_seq=%d REQUEST TIMED OUT' % (seq))
+        print('>  udp_seq=%d REQUEST TIMED OUT' % (seq))
+        ping_count += 1
+        print("| --------- (TIMEOUT) ping_count: " + str(ping_count) + ", ping_received: " + str(ping_received) + ", packet_loss: " + str((ping_count - ping_received) / ping_count * 100) + "%") 
+
 
 ####### display stats
 summary()
