@@ -1,6 +1,6 @@
 # UDP-Pinger
 
-![image](https://user-images.githubusercontent.com/47013770/162745442-70578912-a4a4-47c3-928c-a3f543bb94a7.png)
+![ezgif-5-5e9e7651f1](https://user-images.githubusercontent.com/47013770/162745712-9766ef0e-b4fd-422b-828e-a96580d467d1.gif)
 
 ## Part 1 – UDP Pinger with No Delay and No Loss
 
