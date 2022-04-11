@@ -53,7 +53,7 @@ port = 12002
 serverAddress = (host, port)
 
 ######## ping variables
-number_of_pings = 500 
+number_of_pings = 100 
 timeout = 1 # 1 second = max amount of time to make client wait, any longer and it times out
 sleep_time = 0
 
