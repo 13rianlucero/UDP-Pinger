@@ -95,7 +95,7 @@ def summary():
 
     print("\n\n ALTERNATE ANALYSIS: ")
     print('  --- %s udp ping statistics ---' % (host))
-    print('  %d packets transmitted, %d received, %0.0f%% packet loss,total time %0.0fms' % (ping_count, ping_received, (ping_count - ping_received) / ping_count * 100, total_time))
+    print('  %d packets transmitted, %d received, %0.0f%% packet loss, total time %0.0fms' % (ping_count, ping_received, (ping_count - ping_received) / ping_count * 100, total_time))
     print('  rtt min/avg/max/mdev = %0.3f/%0.3f/%0.3f/%0.3f ms' % (min_ping, avg_ping / ping_count, max_ping, max_ping - min_ping))
     
     print("\n\n TOTAL TIME:")
